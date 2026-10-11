@@ -37,22 +37,70 @@ public class YouTubeChatConnector implements StreamConnector {
         stop();
         this.messageConsumer = consumer;
         this.apiKey = config.getApiKey();
-        String videoOrChatId = config.getChannelOrVideoId();
+        String input = config.getChannelOrVideoId();
 
         if (apiKey == null || apiKey.trim().isEmpty()) {
             log.warn("YouTube API Key not provided. YouTube connector requires a Google API key.");
-            // If no API key provided, fall back to safe error or note
             running.set(false);
             return;
         }
 
         running.set(true);
-        this.liveChatId = videoOrChatId;
+        this.liveChatId = resolveLiveChatId(input);
         this.scheduler = Executors.newSingleThreadScheduledExecutor();
 
         // Start polling every 4 seconds
         scheduler.scheduleWithFixedDelay(this::pollYouTubeChat, 1, 4, TimeUnit.SECONDS);
         log.info("YouTube live chat polling started for liveChatId: {}", liveChatId);
+    }
+
+    private String resolveLiveChatId(String input) {
+        if (input == null || input.trim().isEmpty()) return "";
+        String trimmed = input.trim();
+
+        // Extract video ID if user passed a YouTube URL
+        String videoId = trimmed;
+        if (trimmed.contains("youtube.com/watch?v=")) {
+            int idx = trimmed.indexOf("v=") + 2;
+            int amp = trimmed.indexOf('&', idx);
+            videoId = amp != -1 ? trimmed.substring(idx, amp) : trimmed.substring(idx);
+        } else if (trimmed.contains("youtu.be/")) {
+            int idx = trimmed.indexOf("youtu.be/") + 9;
+            int q = trimmed.indexOf('?', idx);
+            videoId = q != -1 ? trimmed.substring(idx, q) : trimmed.substring(idx);
+        } else if (trimmed.contains("youtube.com/live/")) {
+            int idx = trimmed.indexOf("live/") + 5;
+            int q = trimmed.indexOf('?', idx);
+            videoId = q != -1 ? trimmed.substring(idx, q) : trimmed.substring(idx);
+        }
+
+        // If it looks like a video ID (typical YouTube video IDs are ~11 alphanumeric characters)
+        if (videoId.length() <= 15 && !videoId.startsWith("Ei")) {
+            try {
+                HttpClient client = HttpClient.newBuilder()
+                        .connectTimeout(Duration.ofSeconds(5))
+                        .build();
+                String url = "https://www.googleapis.com/youtube/v3/videos?part=liveStreamingDetails&id=" 
+                        + videoId + "&key=" + apiKey;
+                HttpRequest req = HttpRequest.newBuilder().uri(URI.create(url)).GET().build();
+                HttpResponse<String> resp = client.send(req, HttpResponse.BodyHandlers.ofString());
+                if (resp.statusCode() == 200) {
+                    JsonNode root = objectMapper.readTree(resp.body());
+                    JsonNode items = root.path("items");
+                    if (items.isArray() && items.size() > 0) {
+                        String chatId = items.get(0).path("liveStreamingDetails").path("activeLiveChatId").asText(null);
+                        if (chatId != null && !chatId.isEmpty()) {
+                            log.info("Successfully resolved activeLiveChatId {} from videoId {}", chatId, videoId);
+                            return chatId;
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                log.warn("Failed to resolve liveChatId from videoId {}: {}", videoId, e.getMessage());
+            }
+        }
+
+        return videoId;
     }
 
     private void pollYouTubeChat() {

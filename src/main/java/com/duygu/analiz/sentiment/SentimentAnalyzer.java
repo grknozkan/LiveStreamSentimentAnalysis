@@ -260,6 +260,7 @@ public class SentimentAnalyzer {
 
         boolean nextIsNegated = false;
         double currentMultiplier = 1.0;
+        double lastWordScoreApplied = 0.0;
 
         for (int i = 0; i < tokens.length; i++) {
             String rawToken = tokens[i];
@@ -276,7 +277,19 @@ public class SentimentAnalyzer {
 
             // Handle negation words
             if (negations.contains(cleanToken)) {
-                nextIsNegated = true;
+                if (lastWordScoreApplied != 0.0) {
+                    // Türkçe ardıl olumsuzluk ("güzel değil", "iyi değil")
+                    totalScore -= lastWordScoreApplied;
+                    double invertedScore = -lastWordScoreApplied * 0.85;
+                    totalScore += invertedScore;
+                    lastWordScoreApplied = 0.0;
+                    if (!detectedKeywords.isEmpty()) {
+                        int lastIdx = detectedKeywords.size() - 1;
+                        detectedKeywords.set(lastIdx, "!" + detectedKeywords.get(lastIdx));
+                    }
+                } else {
+                    nextIsNegated = true;
+                }
                 continue;
             }
 
@@ -301,12 +314,14 @@ public class SentimentAnalyzer {
                 }
 
                 totalScore += effectiveScore;
+                lastWordScoreApplied = effectiveScore;
                 matchedWords++;
 
                 // Reset negation & multiplier after applying to target word
                 nextIsNegated = false;
                 currentMultiplier = 1.0;
             } else {
+                lastWordScoreApplied = 0.0;
                 // Check if previous word was negated and current word is unknown
                 if (nextIsNegated && i > 0) {
                     nextIsNegated = false;
