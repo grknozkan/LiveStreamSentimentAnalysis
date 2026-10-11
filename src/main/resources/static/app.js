@@ -329,50 +329,76 @@ document.addEventListener("DOMContentLoaded", () => {
         distNeu.style.width = `${m.neutralRatio || 0}%`;
         distNeg.style.width = `${m.negativeRatio || 0}%`;
 
-        // Chart Verisine Ekle
+        // Chart Verisine Ekle (Zaman damgalı akış)
+        liveTargetScore = score;
+        liveTargetEma = m.movingAverage || 0;
+        liveTargetVol = vol;
+
+        const now = Date.now();
         chartHistory.push({
-            time: m.timestamp,
+            time: now,
             score: score,
             ema: m.movingAverage || 0,
             volatility: vol
         });
 
-        if (chartHistory.length > 60) {
+        // 65 saniyeden eski noktaları temizle
+        const cutoff = now - TIME_WINDOW_MS - 5000;
+        while (chartHistory.length > 0 && chartHistory[0].time < cutoff) {
             chartHistory.shift();
         }
-
-        drawChart();
     }
+
+    // Chat Mesajlarını DOM'a Kasmadan Toplu Ekleme (DocumentFragment & RAF)
+    const chatBatchQueue = [];
+    let chatBatchScheduled = false;
 
     function appendChatMessage(msg) {
         if (!msg) return;
+        chatBatchQueue.push(msg);
+
+        if (!chatBatchScheduled) {
+            chatBatchScheduled = true;
+            requestAnimationFrame(flushChatQueue);
+        }
+    }
+
+    function flushChatQueue() {
+        chatBatchScheduled = false;
+        if (chatBatchQueue.length === 0) return;
 
         const empty = chatStreamList.querySelector(".empty-chat-state");
         if (empty) empty.remove();
 
-        const item = document.createElement("div");
-        const sentimentClass = msg.sentimentLabel === "POSITIVE" ? "pos" : (msg.sentimentLabel === "NEGATIVE" ? "neg" : "neu");
-        item.className = `chat-msg-item ${sentimentClass}`;
+        const fragment = document.createDocumentFragment();
+        const batch = chatBatchQueue.splice(0, chatBatchQueue.length);
 
-        const scoreFormatted = (msg.sentimentScore > 0 ? "+" : "") + msg.sentimentScore.toFixed(2);
+        for (const msg of batch) {
+            const item = document.createElement("div");
+            const sentimentClass = msg.sentimentLabel === "POSITIVE" ? "pos" : (msg.sentimentLabel === "NEGATIVE" ? "neg" : "neu");
+            item.className = `chat-msg-item ${sentimentClass}`;
 
-        let keywordsHtml = "";
-        if (msg.detectedKeywords && msg.detectedKeywords.length > 0) {
-            keywordsHtml = `<div class="msg-keywords">` +
-                msg.detectedKeywords.slice(0, 3).map(kw => `<span class="kw-tag">${kw}</span>`).join("") +
-                `</div>`;
+            const scoreFormatted = (msg.sentimentScore > 0 ? "+" : "") + msg.sentimentScore.toFixed(2);
+
+            let keywordsHtml = "";
+            if (msg.detectedKeywords && msg.detectedKeywords.length > 0) {
+                keywordsHtml = `<div class="msg-keywords">` +
+                    msg.detectedKeywords.slice(0, 3).map(kw => `<span class="kw-tag">${kw}</span>`).join("") +
+                    `</div>`;
+            }
+
+            item.innerHTML = `
+                <div class="msg-header">
+                    <span class="msg-user">${escapeHtml(msg.username)}</span>
+                    <span class="msg-score-badge ${sentimentClass}">${scoreFormatted}</span>
+                </div>
+                <div class="msg-text">${escapeHtml(msg.message)}</div>
+                ${keywordsHtml}
+            `;
+            fragment.appendChild(item);
         }
 
-        item.innerHTML = `
-            <div class="msg-header">
-                <span class="msg-user">${escapeHtml(msg.username)}</span>
-                <span class="msg-score-badge ${sentimentClass}">${scoreFormatted}</span>
-            </div>
-            <div class="msg-text">${escapeHtml(msg.message)}</div>
-            ${keywordsHtml}
-        `;
-
-        chatStreamList.insertBefore(item, chatStreamList.firstChild);
+        chatStreamList.insertBefore(fragment, chatStreamList.firstChild);
 
         // Keep maximum 40 messages in DOM
         while (chatStreamList.children.length > 40) {
@@ -408,15 +434,21 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // Chart Renderer
+    // 60 FPS Sıfır Kasmayla Sürekli Kayan Ultra-Akıcı Grafik Motoru
+    let liveTargetScore = 0;
+    let liveTargetEma = 0;
+    let liveTargetVol = 0;
+    let displayedScore = 0;
+    let displayedEma = 0;
+    let displayedVol = 0;
+    const TIME_WINDOW_MS = 40000; // 40 saniyelik pürüzsüz akıcı zaman penceresi
+
     function drawChart() {
         const rect = canvas.getBoundingClientRect();
         const width = rect.width;
         const height = rect.height;
 
         ctx.clearRect(0, 0, width, height);
-
-        if (chartHistory.length < 2) return;
 
         const padLeft = 45;
         const padRight = 20;
@@ -427,17 +459,15 @@ document.addEventListener("DOMContentLoaded", () => {
         const graphH = height - padTop - padBottom;
         const zeroY = padTop + graphH / 2;
 
-        // Function to map score [-1.0, 1.0] to Y coordinate
         function toY(val) {
             const clamped = Math.max(-1.0, Math.min(1.0, val));
             return zeroY - (clamped * (graphH / 2));
         }
 
-        // Draw horizontal grid lines
+        // Yatay Izgara Çizgileri
         ctx.strokeStyle = "rgba(255, 255, 255, 0.06)";
         ctx.lineWidth = 1;
 
-        // Threshold levels
         const gridLevels = [1.0, 0.5, 0.35, 0.0, -0.30, -0.5, -1.0];
         gridLevels.forEach(lvl => {
             const y = toY(lvl);
@@ -446,7 +476,6 @@ document.addEventListener("DOMContentLoaded", () => {
             ctx.lineTo(width - padRight, y);
             ctx.stroke();
 
-            // Label text
             ctx.fillStyle = lvl === 0 ? "#94a3b8" : (lvl > 0 ? "rgba(16, 185, 129, 0.6)" : "rgba(239, 68, 68, 0.6)");
             ctx.font = "10px 'JetBrains Mono'";
             ctx.textAlign = "right";
@@ -454,7 +483,7 @@ document.addEventListener("DOMContentLoaded", () => {
             ctx.fillText((lvl > 0 ? "+" : "") + lvl.toFixed(2), padLeft - 6, y);
         });
 
-        // Prominent Neutral Line (0.00)
+        // Kesikli Nötr Çizgisi (0.00)
         ctx.strokeStyle = "rgba(255, 255, 255, 0.2)";
         ctx.setLineDash([4, 4]);
         ctx.beginPath();
@@ -463,10 +492,21 @@ document.addEventListener("DOMContentLoaded", () => {
         ctx.stroke();
         ctx.setLineDash([]);
 
-        const n = chartHistory.length;
-        const stepX = graphW / (Math.max(30, n - 1));
+        if (chartHistory.length === 0) return;
 
-        // Active Theme Colors for Canvas
+        // Yumuşak LERP Geçişi (Yaylanma & Dalgalanma giderici)
+        displayedScore += (liveTargetScore - displayedScore) * 0.12;
+        displayedEma += (liveTargetEma - displayedEma) * 0.12;
+        displayedVol += (liveTargetVol - displayedVol) * 0.12;
+
+        const now = Date.now();
+
+        function toX(time) {
+            const elapsed = now - time;
+            return (width - padRight) - (elapsed / TIME_WINDOW_MS) * graphW;
+        }
+
+        // Aktif Tema Renkleri
         const activeTheme = document.body.dataset.theme || "solar-flare";
         let cPos, cMid, cNeg, cGlow, cCorridor, cEma;
 
@@ -474,44 +514,56 @@ document.addEventListener("DOMContentLoaded", () => {
             cPos = "#05df72";
             cMid = "#10b981";
             cNeg = "#f43f5e";
-            cGlow = "rgba(16, 185, 129, 0.45)";
+            cGlow = "rgba(16, 185, 129, 0.35)";
             cCorridor = "rgba(16, 185, 129, 0.08)";
             cEma = "#38bdf8";
         } else if (activeTheme === "cyber-neon") {
             cPos = "#00f2fe";
             cMid = "#a855f7";
             cNeg = "#ff0055";
-            cGlow = "rgba(244, 63, 94, 0.5)";
+            cGlow = "rgba(244, 63, 94, 0.4)";
             cCorridor = "rgba(168, 85, 247, 0.1)";
             cEma = "#fbbf24";
         } else if (activeTheme === "titanium-ice") {
             cPos = "#2dd4bf";
             cMid = "#38bdf8";
             cNeg = "#fb7185";
-            cGlow = "rgba(56, 189, 248, 0.4)";
+            cGlow = "rgba(56, 189, 248, 0.35)";
             cCorridor = "rgba(56, 189, 248, 0.08)";
             cEma = "#818cf8";
-        } else { // solar-flare (default)
+        } else { // solar-flare
             cPos = "#00f5a0";
             cMid = "#ffaa00";
             cNeg = "#ff2a5f";
-            cGlow = "rgba(255, 87, 34, 0.5)";
+            cGlow = "rgba(255, 87, 34, 0.4)";
             cCorridor = "rgba(255, 87, 34, 0.09)";
             cEma = "#ff7a45";
         }
 
-        // 1. Draw Volatility Corridor Band (EMA ± Volatility)
+        // Ekranda görünen noktaları topla ve canlı ucu ekle
+        const visiblePoints = chartHistory.filter(p => toX(p.time) >= padLeft - 30);
+        const allPoints = [...visiblePoints];
+        allPoints.push({
+            time: now,
+            score: displayedScore,
+            ema: displayedEma,
+            volatility: displayedVol
+        });
+
+        if (allPoints.length < 2) return;
+
+        // 1. Dalgalanma Koridoru (EMA ± Volatilite Bandı)
         ctx.beginPath();
-        for (let i = 0; i < n; i++) {
-            const x = padLeft + (i * stepX);
-            const upper = chartHistory[i].ema + (chartHistory[i].volatility || 0);
+        for (let i = 0; i < allPoints.length; i++) {
+            const x = Math.max(padLeft, Math.min(width - padRight, toX(allPoints[i].time)));
+            const upper = allPoints[i].ema + (allPoints[i].volatility || 0);
             const y = toY(upper);
             if (i === 0) ctx.moveTo(x, y);
             else ctx.lineTo(x, y);
         }
-        for (let i = n - 1; i >= 0; i--) {
-            const x = padLeft + (i * stepX);
-            const lower = chartHistory[i].ema - (chartHistory[i].volatility || 0);
+        for (let i = allPoints.length - 1; i >= 0; i--) {
+            const x = Math.max(padLeft, Math.min(width - padRight, toX(allPoints[i].time)));
+            const lower = allPoints[i].ema - (allPoints[i].volatility || 0);
             const y = toY(lower);
             ctx.lineTo(x, y);
         }
@@ -519,55 +571,75 @@ document.addEventListener("DOMContentLoaded", () => {
         ctx.fillStyle = cCorridor;
         ctx.fill();
 
-        // 2. Draw Moving Average (EMA) Line
+        // 2. EMA Eğrisi (Filtrelenmiş Trend Eğrisi)
         ctx.beginPath();
         ctx.strokeStyle = cEma;
         ctx.lineWidth = 2.2;
-        for (let i = 0; i < n; i++) {
-            const x = padLeft + (i * stepX);
-            const y = toY(chartHistory[i].ema);
+        for (let i = 0; i < allPoints.length; i++) {
+            const x = Math.max(padLeft, Math.min(width - padRight, toX(allPoints[i].time)));
+            const y = toY(allPoints[i].ema);
             if (i === 0) ctx.moveTo(x, y);
             else ctx.lineTo(x, y);
         }
         ctx.stroke();
 
-        // 3. Draw Instant Score Line with Glowing Gradient
+        // 3. Anlık Skor Eğrisi (Yüksek Performanslı GPU Çift-Katman Neon Işıma)
         ctx.beginPath();
-        for (let i = 0; i < n; i++) {
-            const x = padLeft + (i * stepX);
-            const y = toY(chartHistory[i].score);
+        for (let i = 0; i < allPoints.length; i++) {
+            const x = Math.max(padLeft, Math.min(width - padRight, toX(allPoints[i].time)));
+            const y = toY(allPoints[i].score);
             if (i === 0) ctx.moveTo(x, y);
             else {
-                const prevX = padLeft + ((i - 1) * stepX);
-                const prevY = toY(chartHistory[i - 1].score);
+                const prevX = Math.max(padLeft, Math.min(width - padRight, toX(allPoints[i - 1].time)));
+                const prevY = toY(allPoints[i - 1].score);
                 const cpX = (prevX + x) / 2;
                 ctx.bezierCurveTo(cpX, prevY, cpX, y, x, y);
             }
         }
 
+        // 1. Katman: Sıfır gecikmeli geniş neon aura (Gecikmeli shadowBlur kullanılmaz)
+        ctx.strokeStyle = cGlow;
+        ctx.lineWidth = 6.5;
+        ctx.stroke();
+
+        // 2. Katman: Keskin degrade çekirdek çizgi
         const gradient = ctx.createLinearGradient(0, padTop, 0, height - padBottom);
         gradient.addColorStop(0, cPos);
         gradient.addColorStop(0.5, cMid);
         gradient.addColorStop(1, cNeg);
 
         ctx.strokeStyle = gradient;
-        ctx.lineWidth = 3;
-        ctx.shadowColor = cGlow;
-        ctx.shadowBlur = 10;
+        ctx.lineWidth = 2.8;
         ctx.stroke();
-        ctx.shadowBlur = 0;
 
-        // Draw glowing point at the newest score
-        const lastX = padLeft + ((n - 1) * stepX);
-        const lastY = toY(chartHistory[n - 1].score);
+        // 4. En uçtaki canlı veri noktasında yumuşak nabız efekti
+        const tipX = width - padRight;
+        const tipY = toY(displayedScore);
+        const pulse = 1 + 0.18 * Math.sin(now * 0.007);
+
         ctx.beginPath();
-        ctx.arc(lastX, lastY, 5, 0, Math.PI * 2);
+        ctx.arc(tipX, tipY, 7 * pulse, 0, Math.PI * 2);
+        ctx.fillStyle = cGlow;
+        ctx.fill();
+
+        ctx.beginPath();
+        ctx.arc(tipX, tipY, 4, 0, Math.PI * 2);
         ctx.fillStyle = "#ffffff";
         ctx.fill();
-        ctx.strokeStyle = chartHistory[n - 1].score >= 0 ? cPos : cNeg;
+        ctx.strokeStyle = displayedScore >= 0 ? cPos : cNeg;
         ctx.lineWidth = 2.5;
         ctx.stroke();
     }
+
+    // 60 FPS Donma Önleyici Animasyon Döngüsünü Başlat
+    function startContinuousChartLoop() {
+        function tick() {
+            drawChart();
+            requestAnimationFrame(tick);
+        }
+        requestAnimationFrame(tick);
+    }
+    startContinuousChartLoop();
 
     function escapeHtml(str) {
         if (!str) return "";
