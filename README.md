@@ -85,7 +85,7 @@
                                 │
                     ┌───────────▼───────────┐
                     │  Spring Boot Server   │
-                    │     Port: 8080        │
+                    │     Port: 7482        │
                     └───────────┬───────────┘
                                 │
           ┌─────────────────────┼─────────────────────┐
@@ -186,7 +186,7 @@ mvnw.cmd spring-boot:run
 Tarayıcınızda şu adresi ziyaret edin:
 
 ```
-http://localhost:8080
+http://localhost:7482
 ```
 
 Uygulama başlar başlamaz **Simülatör** otomatik olarak devreye girer ve anlık veriler akmaya başlar.
@@ -214,7 +214,7 @@ Dashboard'un sol panelindeki butonlarla senaryo tetikleyebilirsiniz:
 
 ### YouTube Canlı Yayınına Bağlanma
 1. **YouTube** sekmesine tıklayın
-2. `liveChatId` değerini girin (YouTube Data API'den alınır)
+2. Canlı yayın video linki veya `liveChatId` girin
 3. Google API anahtarınızı girin (`AIzaSy...`)
 4. **Akışı Başlat** butonuna tıklayın
 
@@ -235,7 +235,7 @@ Dashboard'un sol panelindeki butonlarla senaryo tetikleyebilirsiniz:
 ### WebSocket Mesaj Formatı
 
 ```
-ws://localhost:8080/ws/live-sentiment
+ws://localhost:7482/ws/live-sentiment
 ```
 
 ```json
