@@ -1,0 +1,244 @@
+﻿<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canlı Yayın Sohbetlerinden Duygu Dalgalanması Analizi | SentinelPulse</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Top Navigation / Header -->
+        <header class="app-header">
+            <div class="brand">
+                <div class="brand-icon">
+                    <span class="pulse-ring"></span>
+                    <span class="pulse-dot"></span>
+                </div>
+                <div class="brand-text">
+                    <h1>Sentinel<span>Pulse</span></h1>
+                    <p class="subtitle">Canlı Yayın Sohbetlerinden Duygu Dalgalanması Analizi</p>
+                </div>
+            </div>
+
+            <div class="header-status">
+                <div class="status-badge" id="wsStatusBadge">
+                    <span class="status-indicator live"></span>
+                    <span id="wsStatusText">Canlı Bağlantı Aktif</span>
+                </div>
+                <div class="platform-badge" id="activePlatformBadge">
+                    <span class="platform-icon" id="activePlatformIcon">🎮</span>
+                    <span id="activeChannelText">Simülatör: demo_stream</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Layout -->
+        <main class="dashboard-grid">
+            <!-- Left Column: Controls & Live Chat Feed -->
+            <aside class="sidebar-panel">
+                <!-- Stream Control Card -->
+                <section class="card control-card">
+                    <div class="card-header">
+                        <h2>Yayın & Kaynak Kontrolü</h2>
+                        <span class="badge" id="streamStateBadge">Çalışıyor</span>
+                    </div>
+
+                    <!-- Platform Selector Tabs -->
+                    <div class="platform-tabs">
+                        <button class="tab-btn active" data-platform="SIMULATOR">
+                            <span class="tab-icon">🧪</span> Simülatör
+                        </button>
+                        <button class="tab-btn" data-platform="TWITCH">
+                            <span class="tab-icon">🟣</span> Twitch
+                        </button>
+                        <button class="tab-btn" data-platform="YOUTUBE">
+                            <span class="tab-icon">🔴</span> YouTube
+                        </button>
+                    </div>
+
+                    <!-- Stream Input Form -->
+                    <div class="stream-input-group" id="inputGroupTwitch" style="display: none;">
+                        <label for="twitchChannelInput">Twitch Kanal Adı (Örn: elraenn, wtcn, shroud)</label>
+                        <div class="input-with-icon">
+                            <span class="input-prefix">twitch.tv/</span>
+                            <input type="text" id="twitchChannelInput" placeholder="kanal_adi" value="elraenn">
+                        </div>
+                        <small class="hint-text">API anahtarı gerekmez; anonim WebSocket IRC üzerinden bağlanır.</small>
+                    </div>
+
+                    <div class="stream-input-group" id="inputGroupYoutube" style="display: none;">
+                        <label for="ytLiveChatId">YouTube Live Chat ID / Video ID</label>
+                        <input type="text" id="ytLiveChatId" placeholder="Canlı Yayın ID'si">
+                        <label for="ytApiKey">Google YouTube Data API Anahtarı</label>
+                        <input type="password" id="ytApiKey" placeholder="AIzaSy...">
+                    </div>
+
+                    <div class="stream-input-group" id="inputGroupSimulator">
+                        <label>Simülatör Senaryo Tetikleyicileri</label>
+                        <div class="simulator-actions">
+                            <button class="action-btn hype-btn" data-mode="HYPE">
+                                <span>🔥</span> Coşku Patlaması
+                            </button>
+                            <button class="action-btn rage-btn" data-mode="RAGE">
+                                <span>💥</span> Öfke / Kriz (Rage)
+                            </button>
+                            <button class="action-btn debate-btn" data-mode="CONTROVERSY">
+                                <span>⚡</span> Çatışma / Bölünme
+                            </button>
+                            <button class="action-btn calm-btn" data-mode="NORMAL">
+                                <span>🧘</span> Sakin Sohbet
+                            </button>
+                            <button class="action-btn auto-btn active" data-mode="AUTO_CYCLE">
+                                <span>🔄</span> Otomatik Dalgalanma
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button class="primary-btn" id="startStreamBtn">
+                            <span class="btn-icon">▶</span> Akışı Başlat
+                        </button>
+                        <button class="secondary-btn" id="stopStreamBtn">
+                            <span class="btn-icon">⏹</span> Durdur
+                        </button>
+                    </div>
+                </section>
+
+                <!-- Live Chat Stream Feed -->
+                <section class="card chat-card">
+                    <div class="card-header">
+                        <h2>Anlık Sohbet Akışı</h2>
+                        <span class="chat-speed" id="chatSpeedCounter">0 msg/s</span>
+                    </div>
+                    <div class="chat-stream-container" id="chatStreamList">
+                        <!-- Chat messages appended dynamically -->
+                        <div class="empty-chat-state">Mesajlar bekleniyor...</div>
+                    </div>
+                </section>
+            </aside>
+
+            <!-- Right Column: Visualizations & Analytics -->
+            <section class="analytics-panel">
+                <!-- Top KPI Metric Cards -->
+                <div class="metrics-row">
+                    <!-- Metric 1: Sentiment Score -->
+                    <div class="metric-card" id="cardSentimentScore">
+                        <div class="metric-header">
+                            <span class="metric-label">Anlık Duygu Skoru</span>
+                            <span class="metric-badge" id="sentimentBadge">NÖTR</span>
+                        </div>
+                        <div class="metric-value-container">
+                            <span class="metric-value" id="valSentimentScore">0.00</span>
+                            <span class="metric-unit">[-1.0, +1.0]</span>
+                        </div>
+                        <div class="score-slider-track">
+                            <div class="score-slider-zero"></div>
+                            <div class="score-slider-fill" id="scoreSliderFill"></div>
+                        </div>
+                        <div class="metric-footer">
+                            <span class="footer-subtext">Ağırlıklı Ortalama: <strong id="valMovingAvg">0.00</strong></span>
+                        </div>
+                    </div>
+
+                    <!-- Metric 2: Volatility / Fluctuation -->
+                    <div class="metric-card" id="cardVolatility">
+                        <div class="metric-header">
+                            <span class="metric-label">Dalgalanma Şiddeti (Volatilite)</span>
+                            <span class="metric-badge info" id="volatilityLevelBadge">DÜŞÜK</span>
+                        </div>
+                        <div class="metric-value-container">
+                            <span class="metric-value" id="valVolatility">0.00</span>
+                            <span class="metric-unit">σ Endeks</span>
+                        </div>
+                        <div class="meter-bar">
+                            <div class="meter-fill" id="volatilityMeterFill" style="width: 10%;"></div>
+                        </div>
+                        <div class="metric-footer">
+                            <span class="footer-subtext">Duygu Değişim Hızı: <strong id="valVelocity">0.00/s</strong></span>
+                        </div>
+                    </div>
+
+                    <!-- Metric 3: Dominant Emotion State -->
+                    <div class="metric-card" id="cardEmotionState">
+                        <div class="metric-header">
+                            <span class="metric-label">Baskın Duygu Durumu</span>
+                            <span class="pulse-indicator-small" id="emotionPulse"></span>
+                        </div>
+                        <div class="emotion-state-container">
+                            <span class="emotion-icon" id="emotionStateIcon">🧘</span>
+                            <span class="emotion-text" id="valDominantEmotion">SAKİN</span>
+                        </div>
+                        <div class="metric-footer">
+                            <span class="footer-subtext" id="valAlertBanner">Normal duygusal denge korunuyor.</span>
+                        </div>
+                    </div>
+
+                    <!-- Metric 4: Message Velocity & Total -->
+                    <div class="metric-card">
+                        <div class="metric-header">
+                            <span class="metric-label">İşlenen Veri Hacmi</span>
+                            <span class="metric-badge neutral">CANLI</span>
+                        </div>
+                        <div class="metric-value-container">
+                            <span class="metric-value" id="valTotalMessages">0</span>
+                            <span class="metric-unit">mesaj</span>
+                        </div>
+                        <div class="sentiment-distribution-bar">
+                            <div class="dist-seg pos" id="distPos" style="width: 33%;" title="Pozitif"></div>
+                            <div class="dist-seg neu" id="distNeu" style="width: 34%;" title="Nötr"></div>
+                            <div class="dist-seg neg" id="distNeg" style="width: 33%;" title="Negatif"></div>
+                        </div>
+                        <div class="metric-footer dist-legend">
+                            <span class="legend-item"><span class="dot pos"></span> %<span id="pctPos">0</span> Poz</span>
+                            <span class="legend-item"><span class="dot neu"></span> %<span id="pctNeu">100</span> Nötr</span>
+                            <span class="legend-item"><span class="dot neg"></span> %<span id="pctNeg">0</span> Neg</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Main Chart Card: Real-time Sentiment Wave Graph -->
+                <section class="card chart-card">
+                    <div class="card-header">
+                        <div class="chart-title-group">
+                            <h2>Canlı Duygu Dalgalanması & Anomali Grafiği</h2>
+                            <p class="chart-subtitle">Zaman ekseninde anlık duygu skoru, hareketli ortalama ve dalgalanma koridoru</p>
+                        </div>
+                        <div class="chart-legend">
+                            <span class="legend-tag score-tag"><span class="legend-box score"></span> Anlık Skor</span>
+                            <span class="legend-tag ema-tag"><span class="legend-box ema"></span> Hareketli Ortalama (EMA)</span>
+                            <span class="legend-tag vol-tag"><span class="legend-box vol"></span> Dalgalanma Aralığı (±σ)</span>
+                        </div>
+                    </div>
+
+                    <div class="canvas-wrapper">
+                        <canvas id="sentimentCanvas" width="900" height="340"></canvas>
+                    </div>
+                </section>
+
+                <!-- Bottom Section: Emotional Events & Anomaly Spikes Timeline -->
+                <section class="card events-card">
+                    <div class="card-header">
+                        <div class="events-title-group">
+                            <h2>Tespit Edilen Duygu Kırılmaları & Olay Kayıtları</h2>
+                            <p class="chart-subtitle">Ani coşku (Hype), öfke patlaması (Rage) ve yüksek polarizasyon anları</p>
+                        </div>
+                        <span class="badge" id="eventCountBadge">0 Olay</span>
+                    </div>
+
+                    <div class="events-timeline" id="eventsTimelineList">
+                        <div class="empty-events-state">
+                            Henüz belirgin bir duygusal kırılma veya kriz tespit edilmedi. Sistem canlı dalgalanmaları izliyor...
+                        </div>
+                    </div>
+                </section>
+            </section>
+        </main>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
