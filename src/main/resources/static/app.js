@@ -1,4 +1,4 @@
-﻿// SentinelPulse - Canlı Yayın Duygu Dalgalanması Analizi
+// SentinelPulse - Canlı Yayın Duygu Dalgalanması Analizi
 document.addEventListener("DOMContentLoaded", () => {
     // State
     let selectedPlatform = "SIMULATOR";
@@ -75,6 +75,31 @@ document.addEventListener("DOMContentLoaded", () => {
         drawChart();
     });
     resizeCanvas();
+
+    // Theme Switcher Logic
+    const themeButtons = document.querySelectorAll(".theme-btn");
+    const savedTheme = localStorage.getItem("sentinel_theme") || "solar-flare";
+    applyTheme(savedTheme);
+
+    themeButtons.forEach(btn => {
+        btn.addEventListener("click", () => {
+            const theme = btn.dataset.theme;
+            applyTheme(theme);
+            localStorage.setItem("sentinel_theme", theme);
+            drawChart();
+        });
+    });
+
+    function applyTheme(themeName) {
+        document.body.dataset.theme = themeName;
+        themeButtons.forEach(b => {
+            if (b.dataset.theme === themeName) {
+                b.classList.add("active");
+            } else {
+                b.classList.remove("active");
+            }
+        });
+    }
 
     // Setup Tabs
     tabBtns.forEach(btn => {
@@ -441,6 +466,40 @@ document.addEventListener("DOMContentLoaded", () => {
         const n = chartHistory.length;
         const stepX = graphW / (Math.max(30, n - 1));
 
+        // Active Theme Colors for Canvas
+        const activeTheme = document.body.dataset.theme || "solar-flare";
+        let cPos, cMid, cNeg, cGlow, cCorridor, cEma;
+
+        if (activeTheme === "emerald-aurora") {
+            cPos = "#05df72";
+            cMid = "#10b981";
+            cNeg = "#f43f5e";
+            cGlow = "rgba(16, 185, 129, 0.45)";
+            cCorridor = "rgba(16, 185, 129, 0.08)";
+            cEma = "#38bdf8";
+        } else if (activeTheme === "cyber-neon") {
+            cPos = "#00f2fe";
+            cMid = "#a855f7";
+            cNeg = "#ff0055";
+            cGlow = "rgba(244, 63, 94, 0.5)";
+            cCorridor = "rgba(168, 85, 247, 0.1)";
+            cEma = "#fbbf24";
+        } else if (activeTheme === "titanium-ice") {
+            cPos = "#2dd4bf";
+            cMid = "#38bdf8";
+            cNeg = "#fb7185";
+            cGlow = "rgba(56, 189, 248, 0.4)";
+            cCorridor = "rgba(56, 189, 248, 0.08)";
+            cEma = "#818cf8";
+        } else { // solar-flare (default)
+            cPos = "#00f5a0";
+            cMid = "#ffaa00";
+            cNeg = "#ff2a5f";
+            cGlow = "rgba(255, 87, 34, 0.5)";
+            cCorridor = "rgba(255, 87, 34, 0.09)";
+            cEma = "#ff7a45";
+        }
+
         // 1. Draw Volatility Corridor Band (EMA ± Volatility)
         ctx.beginPath();
         for (let i = 0; i < n; i++) {
@@ -457,13 +516,13 @@ document.addEventListener("DOMContentLoaded", () => {
             ctx.lineTo(x, y);
         }
         ctx.closePath();
-        ctx.fillStyle = "rgba(0, 242, 254, 0.05)";
+        ctx.fillStyle = cCorridor;
         ctx.fill();
 
-        // 2. Draw Moving Average (EMA) Line (Amber)
+        // 2. Draw Moving Average (EMA) Line
         ctx.beginPath();
-        ctx.strokeStyle = "#f59e0b";
-        ctx.lineWidth = 2;
+        ctx.strokeStyle = cEma;
+        ctx.lineWidth = 2.2;
         for (let i = 0; i < n; i++) {
             const x = padLeft + (i * stepX);
             const y = toY(chartHistory[i].ema);
@@ -479,7 +538,6 @@ document.addEventListener("DOMContentLoaded", () => {
             const y = toY(chartHistory[i].score);
             if (i === 0) ctx.moveTo(x, y);
             else {
-                // Smooth line using bezier or lineTo
                 const prevX = padLeft + ((i - 1) * stepX);
                 const prevY = toY(chartHistory[i - 1].score);
                 const cpX = (prevX + x) / 2;
@@ -488,14 +546,14 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         const gradient = ctx.createLinearGradient(0, padTop, 0, height - padBottom);
-        gradient.addColorStop(0, "#10b981");
-        gradient.addColorStop(0.5, "#00f2fe");
-        gradient.addColorStop(1, "#ef4444");
+        gradient.addColorStop(0, cPos);
+        gradient.addColorStop(0.5, cMid);
+        gradient.addColorStop(1, cNeg);
 
         ctx.strokeStyle = gradient;
         ctx.lineWidth = 3;
-        ctx.shadowColor = "rgba(0, 242, 254, 0.4)";
-        ctx.shadowBlur = 8;
+        ctx.shadowColor = cGlow;
+        ctx.shadowBlur = 10;
         ctx.stroke();
         ctx.shadowBlur = 0;
 
@@ -506,8 +564,8 @@ document.addEventListener("DOMContentLoaded", () => {
         ctx.arc(lastX, lastY, 5, 0, Math.PI * 2);
         ctx.fillStyle = "#ffffff";
         ctx.fill();
-        ctx.strokeStyle = chartHistory[n - 1].score >= 0 ? "var(--color-pos)" : "var(--color-neg)";
-        ctx.lineWidth = 2;
+        ctx.strokeStyle = chartHistory[n - 1].score >= 0 ? cPos : cNeg;
+        ctx.lineWidth = 2.5;
         ctx.stroke();
     }
 

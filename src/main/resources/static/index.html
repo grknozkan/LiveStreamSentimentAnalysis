@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
@@ -6,10 +6,10 @@
     <title>Canlı Yayın Sohbetlerinden Duygu Dalgalanması Analizi | SentinelPulse</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Outfit:wght@400;600;700;800;900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body data-theme="solar-flare">
     <div class="app-container">
         <!-- Top Navigation / Header -->
         <header class="app-header">
@@ -24,14 +24,35 @@
                 </div>
             </div>
 
-            <div class="header-status">
-                <div class="status-badge" id="wsStatusBadge">
-                    <span class="status-indicator live"></span>
-                    <span id="wsStatusText">Canlı Bağlantı Aktif</span>
+            <div class="header-right">
+                <!-- Canlı Renk & Tema Seçici -->
+                <div class="theme-switcher-wrapper">
+                    <span class="theme-label">🎨 Tema:</span>
+                    <div class="theme-buttons" id="themeButtons">
+                        <button class="theme-btn active" data-theme="solar-flare" title="Solar Flare (Güneş & Akkor Kor)">
+                            <span class="theme-swatch solar"></span> Solar Flare
+                        </button>
+                        <button class="theme-btn" data-theme="emerald-aurora" title="Emerald Aurora (Kuzey Işıkları)">
+                            <span class="theme-swatch aurora"></span> Aurora
+                        </button>
+                        <button class="theme-btn" data-theme="cyber-neon" title="Cyberpunk Neon (Siber Pembe & Mor)">
+                            <span class="theme-swatch cyber"></span> Cyber Neon
+                        </button>
+                        <button class="theme-btn" data-theme="titanium-ice" title="Titanium Ice (Platin & Buz Mavisi)">
+                            <span class="theme-swatch titanium"></span> Titanyum
+                        </button>
+                    </div>
                 </div>
-                <div class="platform-badge" id="activePlatformBadge">
-                    <span class="platform-icon" id="activePlatformIcon">🎮</span>
-                    <span id="activeChannelText">Simülatör: demo_stream</span>
+
+                <div class="header-status">
+                    <div class="status-badge" id="wsStatusBadge">
+                        <span class="status-indicator live"></span>
+                        <span id="wsStatusText">Canlı Bağlantı Aktif</span>
+                    </div>
+                    <div class="platform-badge" id="activePlatformBadge">
+                        <span class="platform-icon" id="activePlatformIcon">🎮</span>
+                        <span id="activeChannelText">Simülatör: demo_stream</span>
+                    </div>
                 </div>
             </div>
         </header>
