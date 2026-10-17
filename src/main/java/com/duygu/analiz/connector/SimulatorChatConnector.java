@@ -26,56 +26,62 @@ public class SimulatorChatConnector implements StreamConnector {
 
     private final List<String> usernames = List.of(
             "AlpGamer", "CyberTurk", "NeonFalcon", "ProClutch", "Zeynep_X",
-            "MertKing", "Berkant06", "SelinPlayz", "KralOyuncu", "Vortex35",
-            "ShadowHunter", "EceNur", "PixelWolf", "NightHawk", "LegendaryTR"
+            "Alex_FPS", "KlausGamer", "Mateo_ES", "Lucas_FR", "DmitryPro",
+            "MertKing", "ShadowHunter", "PixelWolf", "NightHawk", "LegendaryTR"
     );
 
     private final List<String> normalMessages = List.of(
             "Selam aleykum herkese iyi yayınlar",
+            "Hey chat what game are we playing today?",
             "Bugün hangi oyunu oynuyoruz kral?",
+            "Stream quality looks super clear and smooth here",
             "Yayın sesi ve görüntü gayet net bende",
-            "Çayımı aldım geldim keyifli yayınlar",
+            "Hola a todos buenas tardes chat :)",
+            "Hallo zusammen wie geht es euch?",
             "Aleykum selam hoş geldin",
-            "Oyunda fps kaç alıyorsun şu an?",
-            "Afk mı kaldın az önce?",
-            "Yayın kaç gibi biter tahminen?",
-            "Selamlar iyi akşamlar chat",
-            "Müzik listesini paylaşır mısın?"
+            "Salut tout le monde bon live!",
+            "Всем привет отличного стрима!"
     );
 
     private final List<String> hypeMessages = List.of(
             "HAYDİİİİİ BE İŞTE BUUUU 🔥🔥🔥",
+            "HOLY CLUTCH THAT WAS INSANE LETS GOOO 🚀🚀",
             "MÜKEMMELSİN ABİ GOAT YEMİNLE 👑",
-            "İNANILMAZ BİR CLUTCH ATTI HELAL OLSUN 👏",
-            "POGGERS KRAL ADAMSIN BE 🎉🎉",
-            "GG WP ÇOK İYİ OYNADIN BE HARİKASIN!",
+            "ABSOLUTE MASTERCLASS POGGERS YOU ARE CRACKED 🔥",
+            "VAMOSSS QUÉ INCREÍBLE JUGADA ERES UN CRACK 👏",
+            "GG WP BEST PLAYER ALIVE CLEAN SHOT 💯",
+            "MEISTERHAFT GESPIELT VOLL GEIL PERFEKT 🎉",
             "EFSANE VURUŞTU AĞZIM AÇIK KALDI 🚀",
+            "TROP FORT INCROYABLE BRAVO LE ROI 👑",
             "W W W W W W W W W 🔥",
-            "AŞIRI İYİ HAREKET TÜYLERİM DİKEN DİKEN OLDU",
-            "TEBRİKLER ŞAMPİYON MAŞALLAH SANA ❤️❤️",
-            "BU MAÇ BİZİMDİR MUAZZAM OYUN 💯"
+            "КРАСАВА ЛУЧШИЙ ТОП СЫГРАНО ПУШКА 🏆",
+            "TEBRİKLER ŞAMPİYON MAŞALLAH SANA ❤️❤️"
     );
 
     private final List<String> rageMessages = List.of(
             "HAYIRRR YA BÖYLE HATA YAPILIR MI BERBATTI 💀",
+            "BRO YOU ARE THROWING SO HARD WORST PLAY EVER 💀",
             "Rezalet oynadın maçı sattın resmen 😡",
-            "Gözlerim kanıyor ne yaptın sen ya çöp hareket 🤬",
+            "UNWATCHABLE TRASH GAMEPLAY TILTED AF 🤬",
+            "QUÉ BASURA DE JUGADA DESASTRE TOTAL 👎",
             "Aşırı kötü karar verdi tilt oldum şu an 👎",
-            "Kaybettik işte saçmalık böyle oynanmaz ki!",
-            "Yeteneksiz gibi öldü ya inanılmaz berbat 😭",
+            "SO EIN MÜLL SCHRECKLICH GESPIELT KATASTROPHE 😭",
+            "WHAT A DISASTER YOU SUCK SO BAD 🤮",
+            "C'EST NUL ET POUBELLE HORREUR FLOP TOTAL 🤬",
+            "ПОЛНЫЙ РУИНА И СЛИВ ДНО ИГРА 🤮",
             "L L L L L L L L L 📉",
-            "Sattı maçı abi çıldıracağım ya rezil olduk 🤮",
-            "Kanser ettin bütün chati kapat yayını ya",
-            "Hiç iyi oynamadı rezalet bir turdu"
+            "Kanser ettin bütün chati kapat yayını ya"
     );
 
     private final List<String> controversyMessages = List.of(
             "Bence gayet iyi oynadı suçu adama atmayın",
-            "Neresi iyi oynadı rezaletti maçı verdi işte!",
+            "Not good at all he completely threw the match!",
             "Hakem/oyun haksızlık yaptı takım arkadaşı suçlu",
-            "Boş yapmayın adam elinden geleni yaptı mükemmeldi 🔥",
+            "He did his best that was an awesome try 🔥",
             "Kusura bakmayın ama berbattı savunanlar kör",
-            "Chat sakin olun herkes hata yapar gayet güzel gidiyor"
+            "Para mí jugó muy bien no hablen tonterías",
+            "Das war nicht schlecht das Team war schuld",
+            "Chat sakin olun gayet güzel gidiyor :)"
     );
 
     private int cycleCounter = 0;
