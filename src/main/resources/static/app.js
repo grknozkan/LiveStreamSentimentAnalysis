@@ -76,31 +76,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     resizeCanvas();
 
-    // Theme Switcher Logic
-    const themeButtons = document.querySelectorAll(".theme-btn");
-    const savedTheme = localStorage.getItem("sentinel_theme") || "solar-flare";
-    applyTheme(savedTheme);
-
-    themeButtons.forEach(btn => {
-        btn.addEventListener("click", () => {
-            const theme = btn.dataset.theme;
-            applyTheme(theme);
-            localStorage.setItem("sentinel_theme", theme);
-            drawChart();
-        });
-    });
-
-    function applyTheme(themeName) {
-        document.body.dataset.theme = themeName;
-        themeButtons.forEach(b => {
-            if (b.dataset.theme === themeName) {
-                b.classList.add("active");
-            } else {
-                b.classList.remove("active");
-            }
-        });
-    }
-
     // Setup Tabs
     tabBtns.forEach(btn => {
         btn.addEventListener("click", () => {
@@ -375,22 +350,32 @@ document.addEventListener("DOMContentLoaded", () => {
 
         for (const msg of batch) {
             const item = document.createElement("div");
-            const sentimentClass = msg.sentimentLabel === "POSITIVE" ? "pos" : (msg.sentimentLabel === "NEGATIVE" ? "neg" : "neu");
-            item.className = `chat-msg-item ${sentimentClass}`;
+            const isPos = msg.sentimentLabel === "POSITIVE";
+            const isNeg = msg.sentimentLabel === "NEGATIVE";
+            const sentimentClass = isPos ? "pos" : (isNeg ? "neg" : "neu");
+            
+            // Yüksek pozitif/hype durumunda ek vurgu
+            const isHype = msg.sentimentScore >= 0.65 || (msg.hypeLevel && msg.hypeLevel > 1.2);
+            item.className = `chat-msg-item ${sentimentClass}${isHype ? " hype-burst" : ""}`;
 
-            const scoreFormatted = (msg.sentimentScore > 0 ? "+" : "") + msg.sentimentScore.toFixed(2);
+            const icon = isPos ? "🟢" : (isNeg ? "🔴" : "⚪");
+            const labelText = isHype ? "Hype" : (isPos ? "Pozitif" : (isNeg ? "Negatif" : "Nötr"));
+            const scoreFormatted = (msg.sentimentScore > 0 ? "+" : "") + (msg.sentimentScore || 0).toFixed(2);
 
             let keywordsHtml = "";
             if (msg.detectedKeywords && msg.detectedKeywords.length > 0) {
                 keywordsHtml = `<div class="msg-keywords">` +
-                    msg.detectedKeywords.slice(0, 3).map(kw => `<span class="kw-tag">${kw}</span>`).join("") +
+                    msg.detectedKeywords.slice(0, 3).map(kw => `<span class="kw-tag">${escapeHtml(kw)}</span>`).join("") +
                     `</div>`;
             }
 
             item.innerHTML = `
                 <div class="msg-header">
-                    <span class="msg-user">${escapeHtml(msg.username)}</span>
-                    <span class="msg-score-badge ${sentimentClass}">${scoreFormatted}</span>
+                    <div class="msg-user-wrapper">
+                        <span class="msg-sentiment-icon">${icon}</span>
+                        <span class="msg-user">${escapeHtml(msg.username)}</span>
+                    </div>
+                    <span class="msg-score-badge ${sentimentClass}">${labelText} ${scoreFormatted}</span>
                 </div>
                 <div class="msg-text">${escapeHtml(msg.message)}</div>
                 ${keywordsHtml}
@@ -506,39 +491,13 @@ document.addEventListener("DOMContentLoaded", () => {
             return (width - padRight) - (elapsed / TIME_WINDOW_MS) * graphW;
         }
 
-        // Aktif Tema Renkleri
-        const activeTheme = document.body.dataset.theme || "solar-flare";
-        let cPos, cMid, cNeg, cGlow, cCorridor, cEma;
-
-        if (activeTheme === "emerald-aurora") {
-            cPos = "#05df72";
-            cMid = "#10b981";
-            cNeg = "#f43f5e";
-            cGlow = "rgba(16, 185, 129, 0.35)";
-            cCorridor = "rgba(16, 185, 129, 0.08)";
-            cEma = "#38bdf8";
-        } else if (activeTheme === "cyber-neon") {
-            cPos = "#00f2fe";
-            cMid = "#a855f7";
-            cNeg = "#ff0055";
-            cGlow = "rgba(244, 63, 94, 0.4)";
-            cCorridor = "rgba(168, 85, 247, 0.1)";
-            cEma = "#fbbf24";
-        } else if (activeTheme === "titanium-ice") {
-            cPos = "#2dd4bf";
-            cMid = "#38bdf8";
-            cNeg = "#fb7185";
-            cGlow = "rgba(56, 189, 248, 0.35)";
-            cCorridor = "rgba(56, 189, 248, 0.08)";
-            cEma = "#818cf8";
-        } else { // solar-flare
-            cPos = "#00f5a0";
-            cMid = "#ffaa00";
-            cNeg = "#ff2a5f";
-            cGlow = "rgba(255, 87, 34, 0.4)";
-            cCorridor = "rgba(255, 87, 34, 0.09)";
-            cEma = "#ff7a45";
-        }
+        // Gözü yormayan mat stüdyo renk paleti
+        const cPos = "#10b981";
+        const cMid = "#6366f1";
+        const cNeg = "#f43f5e";
+        const cGlow = "rgba(99, 102, 241, 0.25)";
+        const cCorridor = "rgba(99, 102, 241, 0.08)";
+        const cEma = "#818cf8";
 
         // Ekranda görünen noktaları topla ve canlı ucu ekle
         const visiblePoints = chartHistory.filter(p => toX(p.time) >= padLeft - 30);

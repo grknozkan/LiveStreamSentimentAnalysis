@@ -1,133 +1,65 @@
+/* ==========================================================================
+   SentinelPulse — Göz Yormayan Modern Stüdyo Teması & Canlı Duygu Tasarımı
+   ========================================================================== */
+
 :root {
     --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
     --font-display: 'Outfit', sans-serif;
     --font-mono: 'JetBrains Mono', monospace;
-}
 
-/* 1. TEMA: SOLAR FLARE (Güneş & Akkor Kor - Varsayılan) */
-:root, body[data-theme="solar-flare"] {
-    --bg-base: #06070a;
-    --bg-surface: #0f1017;
-    --bg-card: rgba(18, 17, 26, 0.78);
-    --bg-card-hover: rgba(26, 24, 38, 0.88);
-    --border-subtle: rgba(255, 120, 50, 0.12);
-    --border-bright: rgba(255, 94, 58, 0.45);
+    /* Gözü Yormayan Koyu Mat Stüdyo Renk Paleti (Obsidian & Midnight Slate) */
+    --bg-base: #0b0f19;
+    --bg-surface: #111827;
+    --bg-surface-elevated: #1e293b;
+    --bg-card: rgba(17, 24, 39, 0.78);
+    --bg-card-hover: rgba(30, 41, 59, 0.85);
 
-    --text-primary: #fcfcfd;
-    --text-secondary: #a3a1b5;
-    --text-muted: #6e6b82;
+    /* Dengeli, yumuşak sınır çizgileri */
+    --border-subtle: rgba(255, 255, 255, 0.08);
+    --border-medium: rgba(255, 255, 255, 0.14);
+    --border-focus: rgba(99, 102, 241, 0.45);
 
-    --theme-accent: #ff5722;
-    --theme-accent-gradient: linear-gradient(135deg, #ff3366, #ff5722, #ffaa00);
-    --theme-glow: rgba(255, 87, 34, 0.35);
-
-    --color-cyan: #ff7a45;
-    --color-cyan-glow: rgba(255, 122, 69, 0.3);
-    --color-pos: #00f5a0;
-    --color-pos-glow: rgba(0, 245, 160, 0.3);
-    --color-neg: #ff2a5f;
-    --color-neg-glow: rgba(255, 42, 95, 0.3);
-    --color-warn: #ffaa00;
-    --color-warn-glow: rgba(255, 170, 0, 0.3);
-    --color-twitch: #9146ff;
-    --color-yt: #ff2222;
-
-    --bg-mesh-1: rgba(255, 87, 34, 0.08);
-    --bg-mesh-2: rgba(255, 170, 0, 0.06);
-    --bg-mesh-3: rgba(225, 29, 72, 0.07);
-}
-
-/* 2. TEMA: EMERALD AURORA (Kuzey Işıkları & Zümrüt) */
-body[data-theme="emerald-aurora"] {
-    --bg-base: #020b0b;
-    --bg-surface: #061917;
-    --bg-card: rgba(8, 28, 25, 0.78);
-    --bg-card-hover: rgba(12, 38, 34, 0.88);
-    --border-subtle: rgba(16, 185, 129, 0.15);
-    --border-bright: rgba(52, 211, 153, 0.5);
-
-    --text-primary: #f0fdf4;
-    --text-secondary: #94a3b8;
-    --text-muted: #52796f;
-
-    --theme-accent: #10b981;
-    --theme-accent-gradient: linear-gradient(135deg, #00b4d8, #10b981, #76ff03);
-    --theme-glow: rgba(16, 185, 129, 0.4);
-
-    --color-cyan: #10b981;
-    --color-cyan-glow: rgba(16, 185, 129, 0.35);
-    --color-pos: #05df72;
-    --color-pos-glow: rgba(5, 223, 114, 0.35);
-    --color-neg: #f43f5e;
-    --color-neg-glow: rgba(244, 63, 94, 0.35);
-    --color-warn: #f59e0b;
-    --color-warn-glow: rgba(245, 158, 11, 0.35);
-
-    --bg-mesh-1: rgba(16, 185, 129, 0.08);
-    --bg-mesh-2: rgba(6, 182, 212, 0.07);
-    --bg-mesh-3: rgba(5, 150, 105, 0.06);
-}
-
-/* 3. TEMA: CYBERPUNK NEON (Siber Pembe, Mor & Cyan) */
-body[data-theme="cyber-neon"] {
-    --bg-base: #090314;
-    --bg-surface: #140728;
-    --bg-card: rgba(25, 12, 45, 0.8);
-    --bg-card-hover: rgba(38, 18, 68, 0.9);
-    --border-subtle: rgba(244, 63, 94, 0.18);
-    --border-bright: rgba(217, 70, 239, 0.5);
-
-    --text-primary: #fdf4ff;
-    --text-secondary: #c084fc;
-    --text-muted: #7e4b9e;
-
-    --theme-accent: #f43f5e;
-    --theme-accent-gradient: linear-gradient(135deg, #f43f5e, #a855f7, #00f2fe);
-    --theme-glow: rgba(244, 63, 94, 0.45);
-
-    --color-cyan: #e879f9;
-    --color-cyan-glow: rgba(232, 121, 249, 0.4);
-    --color-pos: #00f2fe;
-    --color-pos-glow: rgba(0, 242, 254, 0.4);
-    --color-neg: #ff0055;
-    --color-neg-glow: rgba(255, 0, 85, 0.45);
-    --color-warn: #fbbf24;
-    --color-warn-glow: rgba(251, 191, 36, 0.4);
-
-    --bg-mesh-1: rgba(244, 63, 94, 0.1);
-    --bg-mesh-2: rgba(168, 85, 247, 0.09);
-    --bg-mesh-3: rgba(0, 242, 254, 0.07);
-}
-
-/* 4. TEMA: TITANIUM ICE (Platin & Buz Mavisi) */
-body[data-theme="titanium-ice"] {
-    --bg-base: #090b0e;
-    --bg-surface: #11151c;
-    --bg-card: rgba(20, 25, 33, 0.8);
-    --bg-card-hover: rgba(28, 35, 47, 0.9);
-    --border-subtle: rgba(148, 163, 184, 0.12);
-    --border-bright: rgba(56, 189, 248, 0.45);
-
+    /* Metin Kontrastı (Göz kamaştırmayan yumuşak beyazlar) */
     --text-primary: #f8fafc;
     --text-secondary: #94a3b8;
     --text-muted: #64748b;
 
-    --theme-accent: #38bdf8;
-    --theme-accent-gradient: linear-gradient(135deg, #cbd5e1, #38bdf8, #818cf8);
-    --theme-glow: rgba(56, 189, 248, 0.35);
+    /* Yumuşak Vurgu & Durum Renkleri (Aşırı neon parlamalardan arındırılmış) */
+    --theme-accent: #6366f1;
+    --theme-accent-hover: #4f46e5;
+    --theme-accent-gradient: linear-gradient(135deg, #6366f1, #818cf8);
+    --theme-glow: rgba(99, 102, 241, 0.25);
 
-    --color-cyan: #38bdf8;
-    --color-cyan-glow: rgba(56, 189, 248, 0.3);
-    --color-pos: #2dd4bf;
-    --color-pos-glow: rgba(45, 212, 191, 0.3);
-    --color-neg: #fb7185;
-    --color-neg-glow: rgba(251, 113, 133, 0.3);
-    --color-warn: #fbbf24;
-    --color-warn-glow: rgba(251, 191, 36, 0.3);
+    /* Duygu Renkleri (Sohbet Kutuları ve Metrikler İçin) */
+    --color-pos: #10b981;
+    --color-pos-soft: rgba(16, 185, 129, 0.14);
+    --color-pos-border: rgba(16, 185, 129, 0.35);
+    --color-pos-glow: rgba(16, 185, 129, 0.2);
 
-    --bg-mesh-1: rgba(56, 189, 248, 0.07);
-    --bg-mesh-2: rgba(129, 140, 248, 0.06);
-    --bg-mesh-3: rgba(148, 163, 184, 0.05);
+    --color-neg: #f43f5e;
+    --color-neg-soft: rgba(244, 63, 94, 0.14);
+    --color-neg-border: rgba(244, 63, 94, 0.35);
+    --color-neg-glow: rgba(244, 63, 94, 0.2);
+
+    --color-neu: #64748b;
+    --color-neu-soft: rgba(100, 116, 139, 0.12);
+    --color-neu-border: rgba(100, 116, 139, 0.28);
+
+    --color-warn: #f59e0b;
+    --color-warn-soft: rgba(245, 158, 11, 0.12);
+    --color-warn-border: rgba(245, 158, 11, 0.35);
+
+    --color-hype: #eab308;
+    --color-hype-soft: rgba(234, 179, 8, 0.15);
+    --color-hype-border: rgba(234, 179, 8, 0.4);
+
+    --color-twitch: #9146ff;
+    --color-yt: #ef4444;
+
+    /* Arka plan yumuşak ambiyans ışıması */
+    --bg-mesh-1: rgba(99, 102, 241, 0.06);
+    --bg-mesh-2: rgba(56, 189, 248, 0.04);
+    --bg-mesh-3: rgba(16, 185, 129, 0.03);
 }
 
 * {
@@ -139,15 +71,15 @@ body[data-theme="titanium-ice"] {
 body {
     background-color: var(--bg-base);
     background-image: 
-        radial-gradient(at 10% 15%, var(--bg-mesh-1) 0px, transparent 55%),
-        radial-gradient(at 90% 10%, var(--bg-mesh-2) 0px, transparent 50%),
+        radial-gradient(at 15% 15%, var(--bg-mesh-1) 0px, transparent 60%),
+        radial-gradient(at 85% 10%, var(--bg-mesh-2) 0px, transparent 50%),
         radial-gradient(at 50% 90%, var(--bg-mesh-3) 0px, transparent 50%);
     background-attachment: fixed;
     color: var(--text-primary);
     font-family: var(--font-sans);
     min-height: 100vh;
     overflow-x: hidden;
-    transition: background-color 0.4s ease, color 0.4s ease;
+    line-height: 1.5;
 }
 
 .app-container {
@@ -159,17 +91,19 @@ body {
     gap: 20px;
 }
 
-/* Header */
+/* ==========================================================================
+   Header / Üst Gezinme
+   ========================================================================== */
 .app-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 16px 24px;
     background: var(--bg-card);
-    backdrop-filter: blur(20px);
+    backdrop-filter: blur(18px);
     border: 1px solid var(--border-subtle);
     border-radius: 18px;
-    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.45);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
     position: relative;
     overflow: hidden;
 }
@@ -182,7 +116,7 @@ body {
     right: 0;
     height: 2px;
     background: var(--theme-accent-gradient);
-    opacity: 0.85;
+    opacity: 0.9;
 }
 
 .brand {
@@ -200,8 +134,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 0 24px var(--theme-glow);
-    transition: all 0.4s ease;
+    box-shadow: 0 4px 16px var(--theme-glow);
 }
 
 .pulse-ring {
@@ -210,34 +143,34 @@ body {
     height: 100%;
     border-radius: 14px;
     border: 2px solid var(--theme-accent);
-    animation: ringPulse 2s cubic-bezier(0.24, 0, 0.38, 1) infinite;
+    animation: ringPulse 2.4s cubic-bezier(0.24, 0, 0.38, 1) infinite;
 }
 
 .pulse-dot {
-    width: 14px;
-    height: 14px;
+    width: 12px;
+    height: 12px;
     background: #ffffff;
     border-radius: 50%;
-    box-shadow: 0 0 8px rgba(255, 255, 255, 0.9);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.85);
 }
 
 @keyframes ringPulse {
-    0% { transform: scale(1); opacity: 0.8; }
+    0% { transform: scale(1); opacity: 0.7; }
     100% { transform: scale(1.6); opacity: 0; }
 }
 
 .brand-text h1 {
     font-family: var(--font-display);
-    font-size: 1.65rem;
+    font-size: 1.6rem;
     font-weight: 800;
-    letter-spacing: -0.5px;
+    letter-spacing: -0.4px;
+    color: var(--text-primary);
 }
 
 .brand-text h1 span {
     background: var(--theme-accent-gradient);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    text-shadow: 0 0 20px var(--theme-glow);
 }
 
 .subtitle {
@@ -245,76 +178,11 @@ body {
     color: var(--text-secondary);
 }
 
-/* Header Right: Themes & Statuses */
 .header-right {
     display: flex;
     align-items: center;
-    gap: 20px;
-    flex-wrap: wrap;
+    gap: 14px;
 }
-
-.theme-switcher-wrapper {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    background: rgba(0, 0, 0, 0.35);
-    padding: 4px 6px;
-    border-radius: 14px;
-    border: 1px solid var(--border-subtle);
-}
-
-.theme-label {
-    font-size: 0.75rem;
-    font-weight: 600;
-    color: var(--text-secondary);
-    padding-left: 6px;
-}
-
-.theme-buttons {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-}
-
-.theme-btn {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    padding: 6px 11px;
-    border-radius: 10px;
-    background: transparent;
-    border: 1px solid transparent;
-    color: var(--text-secondary);
-    font-family: var(--font-sans);
-    font-size: 0.74rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.25s ease;
-}
-
-.theme-btn:hover {
-    color: var(--text-primary);
-    background: rgba(255, 255, 255, 0.05);
-}
-
-.theme-btn.active {
-    background: rgba(255, 255, 255, 0.09);
-    color: var(--text-primary);
-    border-color: var(--border-bright);
-    box-shadow: 0 0 12px var(--theme-glow);
-}
-
-.theme-swatch {
-    width: 9px;
-    height: 9px;
-    border-radius: 50%;
-    display: inline-block;
-}
-
-.theme-swatch.solar { background: linear-gradient(135deg, #ff3366, #ffaa00); }
-.theme-swatch.aurora { background: linear-gradient(135deg, #00b4d8, #10b981); }
-.theme-swatch.cyber { background: linear-gradient(135deg, #f43f5e, #a855f7); }
-.theme-swatch.titanium { background: linear-gradient(135deg, #cbd5e1, #38bdf8); }
 
 .header-status {
     display: flex;
@@ -327,60 +195,64 @@ body {
     align-items: center;
     gap: 8px;
     padding: 8px 14px;
-    border-radius: 20px;
+    border-radius: 14px;
     background: rgba(255, 255, 255, 0.04);
     border: 1px solid var(--border-subtle);
     font-size: 0.82rem;
     font-weight: 500;
+    color: var(--text-secondary);
 }
 
 .status-indicator {
-    width: 9px;
-    height: 9px;
+    width: 8px;
+    height: 8px;
     border-radius: 50%;
 }
 
 .status-indicator.live {
     background: var(--color-pos);
-    box-shadow: 0 0 10px var(--color-pos);
-    animation: blinkLive 1.5s infinite;
+    box-shadow: 0 0 8px var(--color-pos);
+    animation: blinkLive 1.8s infinite;
 }
 
 .status-indicator.offline {
     background: var(--color-neg);
-    box-shadow: 0 0 8px var(--color-neg);
+    box-shadow: 0 0 6px var(--color-neg);
 }
 
 @keyframes blinkLive {
     0%, 100% { opacity: 1; }
-    50% { opacity: 0.4; }
+    50% { opacity: 0.35; }
 }
 
-/* Dashboard Grid */
+/* ==========================================================================
+   Dashboard Ana Izgara Düzeni
+   ========================================================================== */
 .dashboard-grid {
     display: grid;
-    grid-template-columns: 380px 1fr;
+    grid-template-columns: 390px 1fr;
     gap: 20px;
 }
 
-@media (max-width: 1200px) {
+@media (max-width: 1240px) {
     .dashboard-grid {
         grid-template-columns: 1fr;
     }
 }
 
-/* Cards Common */
+/* Kart Genel Özellikleri */
 .card {
     background: var(--bg-card);
     backdrop-filter: blur(16px);
     border: 1px solid var(--border-subtle);
     border-radius: 16px;
     padding: 20px;
-    transition: all 0.3s ease;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+    transition: border-color 0.25s ease, box-shadow 0.25s ease;
 }
 
 .card:hover {
-    border-color: rgba(255, 255, 255, 0.12);
+    border-color: var(--border-medium);
 }
 
 .card-header {
@@ -401,26 +273,28 @@ body {
     font-size: 0.72rem;
     font-weight: 600;
     padding: 4px 10px;
-    border-radius: 12px;
-    background: rgba(16, 185, 129, 0.15);
+    border-radius: 10px;
+    background: rgba(16, 185, 129, 0.12);
     color: var(--color-pos);
-    border: 1px solid rgba(16, 185, 129, 0.3);
+    border: 1px solid var(--color-pos-border);
 }
 
-/* Sidebar Panel */
+/* Sol Panel (Kontrol & Sohbet) */
 .sidebar-panel {
     display: flex;
     flex-direction: column;
     gap: 20px;
 }
 
+/* Platform Sekmeleri */
 .platform-tabs {
     display: flex;
-    background: rgba(0, 0, 0, 0.35);
+    background: rgba(0, 0, 0, 0.3);
     padding: 4px;
-    border-radius: 10px;
+    border-radius: 12px;
     gap: 4px;
     margin-bottom: 16px;
+    border: 1px solid var(--border-subtle);
 }
 
 .tab-btn {
@@ -442,13 +316,14 @@ body {
 
 .tab-btn:hover {
     color: #ffffff;
+    background: rgba(255, 255, 255, 0.04);
 }
 
 .tab-btn.active {
-    background: var(--bg-surface);
-    color: var(--theme-accent);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-    border: 1px solid var(--border-bright);
+    background: var(--bg-surface-elevated);
+    color: var(--text-primary);
+    border: 1px solid var(--border-medium);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 .stream-input-group {
@@ -459,7 +334,7 @@ body {
 }
 
 .stream-input-group label {
-    font-size: 0.8rem;
+    font-size: 0.78rem;
     color: var(--text-secondary);
     font-weight: 500;
 }
@@ -467,16 +342,16 @@ body {
 .input-with-icon {
     display: flex;
     align-items: center;
-    background: rgba(0, 0, 0, 0.3);
+    background: rgba(0, 0, 0, 0.25);
     border: 1px solid var(--border-subtle);
-    border-radius: 8px;
+    border-radius: 10px;
     padding: 0 12px;
-    transition: border 0.2s;
+    transition: border 0.2s, box-shadow 0.2s;
 }
 
 .input-with-icon:focus-within {
     border-color: var(--theme-accent);
-    box-shadow: 0 0 8px var(--theme-glow);
+    box-shadow: 0 0 12px var(--theme-glow);
 }
 
 .input-prefix {
@@ -501,7 +376,7 @@ body {
     color: var(--text-muted);
 }
 
-/* Simulator Action Buttons */
+/* Simülatör Aksiyon Butonları */
 .simulator-actions {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -514,7 +389,7 @@ body {
     background: rgba(255, 255, 255, 0.03);
     color: var(--text-secondary);
     padding: 9px 10px;
-    border-radius: 8px;
+    border-radius: 10px;
     font-size: 0.75rem;
     font-weight: 600;
     cursor: pointer;
@@ -525,8 +400,9 @@ body {
 }
 
 .action-btn:hover {
-    background: rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.06);
     color: #ffffff;
+    border-color: var(--border-medium);
 }
 
 .action-btn.hype-btn:hover { border-color: var(--color-pos); color: var(--color-pos); }
@@ -534,16 +410,16 @@ body {
 .action-btn.debate-btn:hover { border-color: var(--color-warn); color: var(--color-warn); }
 .action-btn.auto-btn { grid-column: span 2; }
 .action-btn.auto-btn.active {
-    background: rgba(255, 255, 255, 0.08);
+    background: rgba(99, 102, 241, 0.12);
     border-color: var(--theme-accent);
-    color: var(--theme-accent);
+    color: #c7d2fe;
     box-shadow: 0 0 12px var(--theme-glow);
 }
 
 .form-actions {
     display: flex;
     gap: 10px;
-    margin-top: 12px;
+    margin-top: 14px;
 }
 
 .primary-btn, .secondary-btn {
@@ -553,7 +429,7 @@ body {
     justify-content: center;
     gap: 8px;
     padding: 10px 14px;
-    border-radius: 8px;
+    border-radius: 10px;
     font-weight: 600;
     font-size: 0.85rem;
     cursor: pointer;
@@ -564,42 +440,44 @@ body {
     background: var(--theme-accent-gradient);
     color: #ffffff;
     border: none;
-    box-shadow: 0 4px 16px var(--theme-glow);
+    box-shadow: 0 4px 14px var(--theme-glow);
 }
 
 .primary-btn:hover {
     transform: translateY(-1px);
-    box-shadow: 0 6px 24px var(--theme-glow);
-    filter: brightness(1.1);
+    box-shadow: 0 6px 18px var(--theme-glow);
+    filter: brightness(1.08);
 }
 
 .secondary-btn {
-    background: rgba(255, 255, 255, 0.06);
+    background: rgba(255, 255, 255, 0.05);
     border: 1px solid var(--border-subtle);
     color: var(--text-primary);
 }
 
 .secondary-btn:hover {
-    background: rgba(239, 68, 68, 0.15);
-    border-color: var(--color-neg);
+    background: rgba(244, 63, 94, 0.14);
+    border-color: var(--color-neg-border);
     color: var(--color-neg);
 }
 
-/* Live Chat Stream */
+/* ==========================================================================
+   Canlı Sohbet Akışı & Duygu Bazlı Renkli Mesaj Kutuları
+   ========================================================================== */
 .chat-card {
     display: flex;
     flex-direction: column;
-    height: 480px;
+    height: 520px;
 }
 
 .chat-speed {
-    font-size: 0.75rem;
+    font-size: 0.74rem;
     font-family: var(--font-mono);
-    color: var(--theme-accent);
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid var(--border-subtle);
+    color: #c7d2fe;
+    background: rgba(99, 102, 241, 0.12);
+    border: 1px solid rgba(99, 102, 241, 0.25);
     padding: 3px 8px;
-    border-radius: 6px;
+    border-radius: 8px;
 }
 
 .chat-stream-container {
@@ -607,7 +485,7 @@ body {
     overflow-y: auto;
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 9px;
     padding-right: 4px;
 }
 
@@ -619,16 +497,25 @@ body {
     border-radius: 4px;
 }
 
+/* Mesaj Kutusu Temel Stili */
 .chat-msg-item {
-    background: rgba(0, 0, 0, 0.25);
-    border-left: 3px solid var(--text-muted);
-    border-radius: 6px;
-    padding: 8px 10px;
+    border-radius: 10px;
+    padding: 10px 12px;
     font-size: 0.82rem;
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 5px;
+    border-left: 4px solid var(--color-neu);
+    border-top: 1px solid var(--border-subtle);
+    border-right: 1px solid var(--border-subtle);
+    border-bottom: 1px solid var(--border-subtle);
+    background: var(--color-neu-soft);
     animation: slideInMsg 0.2s ease-out;
+    transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+}
+
+.chat-msg-item:hover {
+    transform: translateX(2px);
 }
 
 @keyframes slideInMsg {
@@ -636,18 +523,67 @@ body {
     to { opacity: 1; transform: translateY(0); }
 }
 
+/* POZİTİF MESAJ KUTUSU (Yumuşak Zümrüt Yeşili) */
 .chat-msg-item.pos {
     border-left-color: var(--color-pos);
-    background: rgba(16, 185, 129, 0.05);
+    border-top-color: var(--color-pos-border);
+    border-right-color: var(--color-pos-border);
+    border-bottom-color: var(--color-pos-border);
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.13) 0%, rgba(16, 185, 129, 0.04) 100%);
+    box-shadow: 0 2px 10px rgba(16, 185, 129, 0.08);
+}
+.chat-msg-item.pos:hover {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.18) 0%, rgba(16, 185, 129, 0.07) 100%);
+    border-color: rgba(16, 185, 129, 0.5);
+    box-shadow: 0 4px 14px rgba(16, 185, 129, 0.15);
+}
+.chat-msg-item.pos .msg-user {
+    color: #6ee7b7;
 }
 
+/* NEGATİF MESAJ KUTUSU (Yumuşak Gül / Kırmızı) */
 .chat-msg-item.neg {
     border-left-color: var(--color-neg);
-    background: rgba(239, 68, 68, 0.05);
+    border-top-color: var(--color-neg-border);
+    border-right-color: var(--color-neg-border);
+    border-bottom-color: var(--color-neg-border);
+    background: linear-gradient(135deg, rgba(244, 63, 94, 0.13) 0%, rgba(244, 63, 94, 0.04) 100%);
+    box-shadow: 0 2px 10px rgba(244, 63, 94, 0.08);
+}
+.chat-msg-item.neg:hover {
+    background: linear-gradient(135deg, rgba(244, 63, 94, 0.18) 0%, rgba(244, 63, 94, 0.07) 100%);
+    border-color: rgba(244, 63, 94, 0.5);
+    box-shadow: 0 4px 14px rgba(244, 63, 94, 0.15);
+}
+.chat-msg-item.neg .msg-user {
+    color: #fca5a5;
 }
 
+/* NÖTR MESAJ KUTUSU (Dengeli Arduvaz Grisi) */
 .chat-msg-item.neu {
-    border-left-color: #64748b;
+    border-left-color: var(--color-neu);
+    border-top-color: var(--color-neu-border);
+    border-right-color: var(--color-neu-border);
+    border-bottom-color: var(--color-neu-border);
+    background: linear-gradient(135deg, rgba(100, 116, 139, 0.10) 0%, rgba(100, 116, 139, 0.03) 100%);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+}
+.chat-msg-item.neu:hover {
+    background: linear-gradient(135deg, rgba(100, 116, 139, 0.15) 0%, rgba(100, 116, 139, 0.06) 100%);
+    border-color: rgba(148, 163, 184, 0.4);
+}
+.chat-msg-item.neu .msg-user {
+    color: #cbd5e1;
+}
+
+/* HYPE / YÜKSEK COŞKU KUTUSU (İsteğe bağlı skor ≥ 0.65) */
+.chat-msg-item.hype-burst {
+    border-left-color: var(--color-hype);
+    border-top-color: var(--color-hype-border);
+    border-right-color: var(--color-hype-border);
+    border-bottom-color: var(--color-hype-border);
+    background: linear-gradient(135deg, rgba(234, 179, 8, 0.16) 0%, rgba(16, 185, 129, 0.06) 100%);
+    box-shadow: 0 2px 12px rgba(234, 179, 8, 0.12);
 }
 
 .msg-header {
@@ -656,41 +592,84 @@ body {
     align-items: center;
 }
 
+.msg-user-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.msg-sentiment-icon {
+    font-size: 0.75rem;
+    line-height: 1;
+}
+
 .msg-user {
     font-weight: 600;
-    color: #e2e8f0;
+    font-size: 0.82rem;
+    letter-spacing: -0.2px;
 }
 
 .msg-score-badge {
     font-size: 0.7rem;
     font-family: var(--font-mono);
     font-weight: 700;
-    padding: 2px 6px;
-    border-radius: 4px;
+    padding: 2px 7px;
+    border-radius: 6px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
 }
 
-.msg-score-badge.pos { background: rgba(16, 185, 129, 0.2); color: var(--color-pos); }
-.msg-score-badge.neg { background: rgba(239, 68, 68, 0.2); color: var(--color-neg); }
-.msg-score-badge.neu { background: rgba(100, 116, 139, 0.2); color: #94a3b8; }
+.msg-score-badge.pos { 
+    background: rgba(16, 185, 129, 0.22); 
+    color: #6ee7b7; 
+    border: 1px solid var(--color-pos-border);
+}
+.msg-score-badge.neg { 
+    background: rgba(244, 63, 94, 0.22); 
+    color: #fca5a5; 
+    border: 1px solid var(--color-neg-border);
+}
+.msg-score-badge.neu { 
+    background: rgba(100, 116, 139, 0.2); 
+    color: #cbd5e1; 
+    border: 1px solid var(--color-neu-border);
+}
 
 .msg-text {
     color: #f1f5f9;
     word-break: break-word;
-    line-height: 1.35;
+    line-height: 1.4;
+    font-size: 0.84rem;
 }
 
 .msg-keywords {
     display: flex;
     flex-wrap: wrap;
     gap: 4px;
+    margin-top: 2px;
 }
 
 .kw-tag {
     font-size: 0.65rem;
-    padding: 1px 5px;
-    border-radius: 4px;
-    background: rgba(255, 255, 255, 0.06);
+    font-family: var(--font-mono);
+    padding: 2px 6px;
+    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.05);
     color: var(--text-secondary);
+    border: 1px solid var(--border-subtle);
+}
+
+.chat-msg-item.pos .kw-tag {
+    background: rgba(16, 185, 129, 0.12);
+    color: #a7f3d0;
+    border-color: rgba(16, 185, 129, 0.25);
+}
+
+.chat-msg-item.neg .kw-tag {
+    background: rgba(244, 63, 94, 0.12);
+    color: #fecdd3;
+    border-color: rgba(244, 63, 94, 0.25);
 }
 
 .empty-chat-state {
@@ -700,7 +679,9 @@ body {
     margin-top: 50px;
 }
 
-/* Analytics Panel */
+/* ==========================================================================
+   Sağ Analitik Paneli & Metrik Kartları
+   ========================================================================== */
 .analytics-panel {
     display: flex;
     flex-direction: column;
@@ -723,11 +704,19 @@ body {
     background: var(--bg-card);
     backdrop-filter: blur(16px);
     border: 1px solid var(--border-subtle);
-    border-radius: 14px;
+    border-radius: 16px;
     padding: 16px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.2);
+    transition: all 0.25s ease;
+}
+
+.metric-card:hover {
+    border-color: var(--border-medium);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
 }
 
 .metric-header {
@@ -739,7 +728,7 @@ body {
 
 .metric-label {
     font-size: 0.78rem;
-    font-weight: 500;
+    font-weight: 600;
     color: var(--text-secondary);
 }
 
@@ -748,63 +737,68 @@ body {
     font-weight: 700;
     padding: 2px 8px;
     border-radius: 10px;
-    background: rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-secondary);
 }
 
-.metric-badge.pos { background: rgba(16, 185, 129, 0.2); color: var(--color-pos); }
-.metric-badge.neg { background: rgba(239, 68, 68, 0.2); color: var(--color-neg); }
-.metric-badge.info { background: rgba(0, 242, 254, 0.2); color: var(--color-cyan); }
-.metric-badge.warn { background: rgba(245, 158, 11, 0.2); color: var(--color-warn); }
+.metric-badge.pos { background: rgba(16, 185, 129, 0.15); color: var(--color-pos); border-color: var(--color-pos-border); }
+.metric-badge.neg { background: rgba(244, 63, 94, 0.15); color: var(--color-neg); border-color: var(--color-neg-border); }
+.metric-badge.info { background: rgba(99, 102, 241, 0.15); color: #a5b4fc; border-color: rgba(99, 102, 241, 0.3); }
 
 .metric-value-container {
     display: flex;
     align-items: baseline;
-    gap: 6px;
-    margin: 4px 0 10px 0;
+    gap: 8px;
+    margin-bottom: 12px;
 }
 
 .metric-value {
     font-family: var(--font-mono);
-    font-size: 1.8rem;
-    font-weight: 700;
-    letter-spacing: -1px;
+    font-size: 1.85rem;
+    font-weight: 800;
+    color: #ffffff;
+    letter-spacing: -0.5px;
 }
 
 .metric-unit {
-    font-size: 0.75rem;
+    font-size: 0.74rem;
     color: var(--text-muted);
 }
 
 .score-slider-track {
     position: relative;
     height: 6px;
-    background: rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.07);
     border-radius: 3px;
     margin-bottom: 12px;
+    overflow: hidden;
 }
 
 .score-slider-zero {
     position: absolute;
     left: 50%;
+    top: 0;
+    bottom: 0;
     width: 2px;
-    height: 10px;
-    top: -2px;
-    background: rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.25);
+    transform: translateX(-50%);
 }
 
 .score-slider-fill {
     position: absolute;
+    top: 0;
+    bottom: 0;
     left: 50%;
-    height: 100%;
     width: 0%;
-    background: var(--color-cyan);
+    background: var(--theme-accent);
     border-radius: 3px;
     transition: all 0.3s ease;
 }
 
 .meter-bar {
     height: 6px;
-    background: rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.07);
     border-radius: 3px;
     margin-bottom: 12px;
     overflow: hidden;
@@ -838,8 +832,8 @@ body {
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    background: var(--color-cyan);
-    box-shadow: 0 0 8px var(--color-cyan);
+    background: var(--theme-accent);
+    box-shadow: 0 0 8px var(--theme-glow);
 }
 
 .sentiment-distribution-bar {
@@ -851,7 +845,7 @@ body {
 }
 
 .dist-seg.pos { background: var(--color-pos); }
-.dist-seg.neu { background: #64748b; }
+.dist-seg.neu { background: var(--color-neu); }
 .dist-seg.neg { background: var(--color-neg); }
 
 .dist-legend {
@@ -872,7 +866,7 @@ body {
     border-radius: 50%;
 }
 .dist-legend .dot.pos { background: var(--color-pos); }
-.dist-legend .dot.neu { background: #64748b; }
+.dist-legend .dot.neu { background: var(--color-neu); }
 .dist-legend .dot.neg { background: var(--color-neg); }
 
 .metric-footer {
@@ -885,7 +879,9 @@ body {
     color: #ffffff;
 }
 
-/* Chart Card */
+/* ==========================================================================
+   Canlı Grafik Kartı (HTML5 Canvas)
+   ========================================================================== */
 .chart-card {
     display: flex;
     flex-direction: column;
@@ -906,7 +902,7 @@ body {
 
 .chart-legend {
     display: flex;
-    gap: 14px;
+    gap: 16px;
 }
 
 .legend-tag {
@@ -922,15 +918,15 @@ body {
     height: 4px;
     border-radius: 2px;
 }
-.legend-box.score { background: #00f2fe; }
-.legend-box.ema { background: #f59e0b; }
-.legend-box.vol { background: rgba(0, 242, 254, 0.25); border: 1px dashed #00f2fe; }
+.legend-box.score { background: #38bdf8; }
+.legend-box.ema { background: #818cf8; }
+.legend-box.vol { background: rgba(99, 102, 241, 0.3); border: 1px dashed #818cf8; }
 
 .canvas-wrapper {
     position: relative;
     width: 100%;
     height: 340px;
-    background: rgba(0, 0, 0, 0.25);
+    background: rgba(0, 0, 0, 0.28);
     border-radius: 12px;
     border: 1px solid var(--border-subtle);
     overflow: hidden;
@@ -942,7 +938,9 @@ body {
     display: block;
 }
 
-/* Events Timeline Card */
+/* ==========================================================================
+   Olay Kayıtları & Kırılma Zaman Çizelgesi
+   ========================================================================== */
 .events-card {
     display: flex;
     flex-direction: column;
@@ -973,7 +971,10 @@ body {
     display: flex;
     align-items: flex-start;
     gap: 14px;
-    border-left: 4px solid var(--color-cyan);
+    border-left: 4px solid var(--theme-accent);
+    border-top: 1px solid var(--border-subtle);
+    border-right: 1px solid var(--border-subtle);
+    border-bottom: 1px solid var(--border-subtle);
     animation: fadeInEvent 0.3s ease;
 }
 
@@ -984,17 +985,17 @@ body {
 
 .event-item.HYPE_SPIKE {
     border-left-color: var(--color-pos);
-    background: rgba(16, 185, 129, 0.08);
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.12) 0%, rgba(16, 185, 129, 0.03) 100%);
 }
 
 .event-item.RAGE_SPIKE {
     border-left-color: var(--color-neg);
-    background: rgba(239, 68, 68, 0.08);
+    background: linear-gradient(135deg, rgba(244, 63, 94, 0.12) 0%, rgba(244, 63, 94, 0.03) 100%);
 }
 
 .event-item.CONTROVERSY {
     border-left-color: var(--color-warn);
-    background: rgba(245, 158, 11, 0.08);
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.12) 0%, rgba(245, 158, 11, 0.03) 100%);
 }
 
 .event-time {
